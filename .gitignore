@@ -1,0 +1,34 @@
+# ========== ENVIRONMENTS ==========
+.env
+.env.*
+.env.local
+.env*.local
+
+# ========== NEXT.JS ==========
+/.next/
+/out/
+/build/
+.vercel
+
+# ========== DEPENDENCIES ==========
+/node_modules
+/.pnp
+.pnp.js
+
+# ========== TESTING ==========
+/coverage
+/test-results/
+/playwright-report/
+
+# ========== TYPESCRIPT ==========
+*.tsbuildinfo
+next-env.d.ts
+
+# ========== DEBUG ==========
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ========== MISC ==========
+.DS_Store
+*.pem
