@@ -1,7 +1,23 @@
 {
-  "name": "my-v0-project",
-  "version": "0.1.0",
+  "name": "melotext",
+  "version": "0.2.1",
   "private": true,
+  "description": "Melody2Text - Mögest du inmitten des wortüberfluteten Weltenlärms einen klaren, dir ganz eigenen Flecken sprachlicher Heimat entdecken. ",
+  "author": "Kirenath with Elias <kirenath@tuta.io>",
+  "license": "MIT",
+  "homepage": "https://melotext.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rooode-Viiis/melotext"
+  },
+  "keywords": [
+    "transcription",
+    "translation",
+    "AI",
+    "nextjs",
+    "melotext",
+    "speech-to-text"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

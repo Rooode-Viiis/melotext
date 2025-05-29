@@ -1,16 +1,25 @@
-// lib/nebius.ts
-// Nebius API 相关函数 (全面升级版 ✅)
+// lib/translate.ts
+// 通用翻译模块（使用环境变量 ✅）
 
 export async function translateText(text: string, apiKey: string) {
+  // 从环境变量中读取API URL和模型名
+  const apiUrl = process.env.TRANSLATION_API_URL;
+  const model = process.env.TRANSLATION_MODEL;
+
+  // 环境变量安全检查（给稳定性+1分 ✨）
+  if (!apiUrl || !model) {
+    throw new Error("❗环境变量 TRANSLATION_API_URL 或 TRANSLATION_MODEL 未设置");
+  }
+
   try {
-    const response = await fetch("https://api.studio.nebius.ai/v1/chat/completions", {
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "deepseek-ai/DeepSeek-V3-0324",
+        model,
         messages: [
           {
             role: "system",
@@ -45,13 +54,13 @@ ${text}
 
     if (!response.ok) {
       const errorDetails = await response.text();
-      console.error("❗Nebius API请求失败:", errorDetails);
+      console.error("❗翻译API请求失败:", errorDetails);
       throw new Error(`API请求失败: ${response.status}`);
     }
 
     const data = await response.json();
 
-    // 安全防护：判断返回内容是否标准
+    // API响应安全检查
     if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
       throw new Error("API响应格式异常：未返回choices内容");
     }
@@ -67,7 +76,7 @@ ${text}
       translation: output,
     };
   } catch (error) {
-    console.error("❗调用Nebius翻译接口异常:", error);
+    console.error("❗调用翻译接口异常:", error);
     throw error;
   }
 }

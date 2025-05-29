@@ -1,5 +1,5 @@
 // lib/multiTranslate.ts
-import { translateText } from "@/lib/nebius";
+import { translateText } from "@/lib/translate";
 
 const MAX_CHUNK_LENGTH = 3000; // 近似1000 tokens以内，防止DeepSeek超限
 

@@ -7,7 +7,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json()
     const { text } = body
-    const apiKey = process.env.NEBIUS_API_KEY
+    const apiKey = process.env.TRANSLATION_API_KEY
 
     if (!text || !apiKey) {
       return NextResponse.json({ error: "缺少必要参数" }, { status: 400 })

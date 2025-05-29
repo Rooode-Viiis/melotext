@@ -109,7 +109,6 @@ body {
   color: #f8f9fa;
 }
 
-/* Apple-inspired scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;

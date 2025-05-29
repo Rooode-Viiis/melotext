@@ -13,8 +13,8 @@ import { cn } from "@/lib/utils"
 
 export default function TranscriptionTool() {
   const [audioUrl, setAudioUrl] = useState("")
-  const [speechModel, setSpeechModel] = useState("best")
-  const [languageCode, setLanguageCode] = useState("zh")
+  const [speechModel, setSpeechModel] = useState("")
+  const [languageCode, setLanguageCode] = useState("")
   const [output, setOutput] = useState("")
   const [translatedOutput, setTranslatedOutput] = useState("")
   const [loading, setLoading] = useState(false)
@@ -215,7 +215,7 @@ export default function TranscriptionTool() {
   return (
     <div
       className="min-h-screen flex items-center justify-center p-4 bg-cover bg-center bg-fixed"
-      style={{ backgroundImage: "url('https://source.unsplash.com/random/1920x1080/?gradient,minimal')" }}
+      style={{ backgroundImage: "url('none')" }}
     >
       <div className="glass-card p-8 rounded-2xl max-w-3xl w-full relative overflow-hidden backdrop-blur-xl border border-white/20 dark:border-gray-800/30 shadow-xl">
         <div className="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-blue-300 opacity-10 blur-3xl" />
@@ -224,7 +224,7 @@ export default function TranscriptionTool() {
         <div className="relative z-10">
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white mb-2">AI音频转文字&翻译工具</h1>
           <p className="text-gray-600 dark:text-gray-300 text-sm mb-8">
-            Powered by AssemblyAI & Nebius AI
+            Powered by AssemblyAI
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -280,23 +280,54 @@ export default function TranscriptionTool() {
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-2">转录模型</label>
                 <Select value={speechModel} onChange={(e) => setSpeechModel(e.target.value)}>
-                  <option value="best">最佳质量（best）</option>
-                  <option value="nano">快速响应（nano）</option>
+                  <option value="" disabled>🌟 请选择转录模型</option>
+                  <option value="best">最佳质量[best]推荐用于音质复杂or多人对话</option>
+                  <option value="nano">快速响应[nano]适用于清晰录音ASMR</option>
                 </Select>
+
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300 block mb-2">源语言</label>
                 <Select value={languageCode} onChange={(e) => setLanguageCode(e.target.value)}>
-                  <option value="zh">中文</option>
-                  <option value="en_us">英语</option>
-                  <option value="ja">日语</option>
-                  <option value="ko">韩语</option>
-                  <option value="fr">法语</option>
-                  <option value="de">德语</option>
-                  <option value="es">西班牙语</option>
-                  <option value="it">意大利语</option>
-                  <option value="ru">俄语</option>
+                  <option value="" disabled>🌐 请选择语言</option>
+
+                  <optgroup label="✨ 便捷选项">
+                    <option value="ALD">自动语言检测</option>
+                  </optgroup>
+
+                  <optgroup label="🌏 亚洲语系">
+                    <option value="zh">中文（普通话，简体）</option>
+                    <option value="ja">日语</option>
+                    <option value="ko">韩语</option>
+                    <option value="hi">印地语</option>
+                    <option value="vi">越南语</option>
+                  </optgroup>
+
+                  <optgroup label="🗣️ 英语大系列">
+                    <option value="en">英语（全球）</option>
+                    <option value="en_us">英语（美国）</option>
+                    <option value="en_au">英语（澳大利亚）</option>
+                    <option value="en_uk">英语（英国）</option>
+                  </optgroup>
+
+                  <optgroup label="🇪🇺 欧洲语言">
+                    <option value="fr">法语</option>
+                    <option value="de">德语</option>
+                    <option value="es">西班牙语</option>
+                    <option value="it">意大利语</option>
+                    <option value="pt">葡萄牙语</option>
+                    <option value="nl">荷兰语</option>
+                    <option value="pl">波兰语</option>
+                    <option value="fi">芬兰语</option>
+                    <option value="uk">乌克兰语</option>
+                    <option value="ru">俄语</option>
+                  </optgroup>
+
+                  <optgroup label="🌍 中东与其他">
+                    <option value="tr">土耳其语</option>
+                  </optgroup>
                 </Select>
+
               </div>
             </div>
 
