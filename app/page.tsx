@@ -282,7 +282,7 @@ export default function TranscriptionTool() {
                 <Select value={speechModel} onChange={(e) => setSpeechModel(e.target.value)}>
                   <option value="" disabled>🌟 请选择转录模型</option>
                   <option value="best">最佳质量[best]推荐用于音质复杂or多人对话</option>
-                  <option value="nano">快速响应[nano]适用于清晰录音ASMR</option>
+                  <option value="nano">快速响应[nano]适用于清晰录音orASMR</option>
                 </Select>
 
               </div>
