@@ -1,12 +1,10 @@
 // lib/translate.ts
-// 通用翻译模块（使用环境变量 ✅）
+// 通用翻译模块
 
 export async function translateText(text: string, apiKey: string) {
-  // 从环境变量中读取API URL和模型名
   const apiUrl = process.env.TRANSLATION_API_URL;
   const model = process.env.TRANSLATION_MODEL;
 
-  // 环境变量安全检查（给稳定性+1分 ✨）
   if (!apiUrl || !model) {
     throw new Error("❗环境变量 TRANSLATION_API_URL 或 TRANSLATION_MODEL 未设置");
   }
@@ -45,8 +43,8 @@ ${text}
             `.trim(),
           },
         ],
-        max_tokens: 3000, // 理论支持完整大段翻译
-        temperature: 0.2, // 再进一步降低创作性，压制"想象发挥"
+        max_tokens: 3000, 
+        temperature: 0.2, 
         top_p: 1,
         stream: false,
       }),
@@ -60,7 +58,6 @@ ${text}
 
     const data = await response.json();
 
-    // API响应安全检查
     if (!data.choices || !Array.isArray(data.choices) || data.choices.length === 0) {
       throw new Error("API响应格式异常：未返回choices内容");
     }

@@ -1,9 +1,16 @@
-// lib/multiTranslate.ts
+/**
+ * - 多段文本翻译器：translateWithChunks
+ * - 当前使用字符长度（而非真实Token）进行分段；
+ * - 每段最大约3000字符，遇句号自动分段；
+ * - 每段翻译失败最多重试1次，最终如失败将返回 【本段翻译失败】；
+ * 
+ * ⚠️ 如果你使用的翻译API有token限制，请手动调整MAX_CHUNK_LENGTH
+ */
+
 import { translateText } from "@/lib/translate";
 
-const MAX_CHUNK_LENGTH = 3000; // 近似1000 tokens以内，防止DeepSeek超限
+const MAX_CHUNK_LENGTH = 3000; 
 
-/** 兼容中英文的智能切片函数（优先按照标点断句） */
 export function splitByTokens(text: string, maxChunkLength = MAX_CHUNK_LENGTH): string[] {
   const chunks: string[] = [];
   let current = "";
@@ -21,7 +28,6 @@ export function splitByTokens(text: string, maxChunkLength = MAX_CHUNK_LENGTH): 
     }
   }
 
-  // 把最后剩余的不满一次切的部分加进去
   if (current.trim().length > 0) {
     chunks.push(current.trim());
   }
@@ -29,7 +35,7 @@ export function splitByTokens(text: string, maxChunkLength = MAX_CHUNK_LENGTH): 
   return chunks;
 }
 
-/** 智能分段翻译，并发翻译，每段自动重试，最终合并 */
+
 export async function translateWithChunks(text: string, apiKey: string): Promise<string> {
   const chunks = splitByTokens(text);
   const totalChunks = chunks.length;
@@ -43,7 +49,6 @@ export async function translateWithChunks(text: string, apiKey: string): Promise
 
   console.time("⏱️ 翻译总耗时");
 
-  // 并发翻译所有chunks
   const translatedParts = await Promise.all(
     chunks.map(async (chunk, index) => {
       for (let attempt = 1; attempt <= 2; attempt++) { // 每段最多重试2次

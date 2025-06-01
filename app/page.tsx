@@ -28,7 +28,7 @@ export default function TranscriptionTool() {
   const [transcriptionError, setTranscriptionError] = useState<string | null>(null)
   const [darkMode, setDarkMode] = useState(false)
 
-  // 初始化暗色模式
+  // 暗色模式还没做orzzzzz
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true"
     setDarkMode(savedDarkMode)
@@ -37,7 +37,6 @@ export default function TranscriptionTool() {
     }
   }, [])
 
-  // 切换暗色模式
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode
     setDarkMode(newDarkMode)

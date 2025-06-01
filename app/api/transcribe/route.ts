@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { transcribeAudio } from "@/lib/assemblyai"
 
-// ✅ 允许的音频 MIME 类型白名单
+//允许的音频 MIME 类型白名单
 const allowedMimeTypes = [
   "audio/mpeg",   // .mp3
   "audio/wav",    // .wav
@@ -10,12 +10,14 @@ const allowedMimeTypes = [
   "audio/x-m4a",  // .m4a (变体)
 ]
 
-// ✅ 文件大小限制（50MB）
-const MAX_SIZE = 50 * 1024 * 1024 // 50MB
-
-/**
- * 获取文件大小和类型（用于验证）
+/*
+ * 文件上传大小限制 —— 与上传、预签名 Link 保持一致（300MB）⚠️
+ * 注意：Cloudflare R2 可支持更大，但 STT 模型处理不推荐超大输入, 建议转换音频格式 or 压缩音频大小 or 进行切片处理
+ * 避免处理时间超时/拉取失败
  */
+
+const MAX_SIZE = 300 * 1024 * 1024
+
 async function getFileMetadata(url: string): Promise<{ size: number; contentType: string } | null> {
   try {
     const res = await fetch(url, { method: "HEAD" })
@@ -31,9 +33,7 @@ async function getFileMetadata(url: string): Promise<{ size: number; contentType
   }
 }
 
-/**
- * 判断是否来自允许的音频链接来源
- */
+
 function isAllowedAudioUrl(audioUrl: string): boolean {
   try {
     const url = new URL(audioUrl)
@@ -53,7 +53,6 @@ function isAllowedAudioUrl(audioUrl: string): boolean {
 
 export async function POST(request: Request) {
   try {
-    // 解析请求体
     let body
     try {
       body = await request.json()
@@ -72,7 +71,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "缺少必要参数" }, { status: 400 })
     }
 
-    // ✅ 来源 URL 检查
+    //来源 URL 检查
     if (!isAllowedAudioUrl(audioUrl)) {
       return NextResponse.json(
         { error: "当前仅支持 GitHub Raw 链接或本服务器上传的 R2 公链链接。" },
@@ -80,7 +79,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // ✅ 读取文件 metadata
     const metadata = await getFileMetadata(audioUrl)
     if (!metadata) {
       return NextResponse.json(
@@ -92,17 +90,16 @@ export async function POST(request: Request) {
     const { size, contentType } = metadata
     console.log("📦 音频文件 => 大小:", size, "类型:", contentType)
 
-    // ✅ 大小限制验证
     if (size > MAX_SIZE) {
       return NextResponse.json(
         {
-          error: `文件过大：${(size / (1024 * 1024)).toFixed(2)}MB，当前限制为 50MB`,
+          error: `文件过大：${(size / (1024 * 1024)).toFixed(2)}MB，当前限制为300MB`,
         },
         { status: 400 }
       )
     }
 
-    // ✅ 类型限制验证
+    //类型限制验证
     if (!allowedMimeTypes.includes(contentType)) {
       return NextResponse.json(
         {
@@ -112,7 +109,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // ✅ 发起转录请求
+    // 发起转录请求
     const result = await transcribeAudio(audioUrl, apiKey, speechModel, languageCode)
     return NextResponse.json(result)
   } catch (error: any) {

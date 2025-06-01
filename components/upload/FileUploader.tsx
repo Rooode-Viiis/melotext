@@ -9,7 +9,7 @@ interface FileUploaderProps {
   maxSize?: number; // in MB
 }
 
-export function FileUploader({ onFileUpload, maxSize = 50 }: FileUploaderProps) {
+export function FileUploader({ onFileUpload, maxSize = 300 }: FileUploaderProps) {
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -82,7 +82,7 @@ export function FileUploader({ onFileUpload, maxSize = 50 }: FileUploaderProps) 
       setUploadProgress(100);
       onFileUpload(publicUrl);
 
-      // 自动删除定时器
+      // 自动删除定时器 (30min)
       setTimeout(async () => {
         await fetch("/api/r2-delete", {
           method: "POST",
@@ -90,7 +90,7 @@ export function FileUploader({ onFileUpload, maxSize = 50 }: FileUploaderProps) 
           body: JSON.stringify({ key }),
         });
         console.log("自动删除成功 ✅");
-      }, 5 * 60 * 1000);
+      }, 30 * 60 * 1000);
     } catch (err: any) {
       setError("上传失败：" + err.message);
       setUploadProgress(0);

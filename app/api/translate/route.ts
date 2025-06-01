@@ -1,5 +1,3 @@
-// app/api/translate/route.ts
-
 import { NextResponse } from "next/server"
 import { translateWithChunks } from "@/lib/multiTranslate"
 

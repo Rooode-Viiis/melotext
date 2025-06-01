@@ -1,4 +1,5 @@
 // AssemblyAI API 相关函数 (含时间戳打印)
+// AssemblyAI API KEY 在 .env.local 内修改
 
 export async function transcribeAudio(audioUrl: string, apiKey: string, speechModel = "best", languageCode = "zh") {
   try {
@@ -39,7 +40,7 @@ export async function transcribeAudio(audioUrl: string, apiKey: string, speechMo
     let completed = false
     let result
     let attempts = 0
-    const maxAttempts = 100;  // 每3秒一次，总共300秒（5分钟）
+    const maxAttempts = 200;  // 最多轮询 200 次，每次间隔 3 秒 ≈ 最长等候 10 分钟
 
     while (!completed && attempts < maxAttempts) {
       attempts++
@@ -68,7 +69,7 @@ export async function transcribeAudio(audioUrl: string, apiKey: string, speechMo
       throw new Error("🚨 转录超时，请稍后再试")
     }
 
-    // 👇 ✅ 打印句子级别 (segments) 时间戳
+    //打印句子级别 (segments) 时间戳
     if (result.segments && Array.isArray(result.segments)) {
       console.log("\n📚 句子时间戳：")
       result.segments.forEach((segment: any, index: number) => {
@@ -80,7 +81,7 @@ export async function transcribeAudio(audioUrl: string, apiKey: string, speechMo
       console.log("⚠️ 没有提供 segments 时间戳")
     }
 
-    // 👇 ✅ 打印首10个单词(逐词)的时间戳（避免过长）
+    //打印首10个单词(逐词)的时间戳
     if (result.words && Array.isArray(result.words)) {
       console.log("\n✏️ 单词逐个时间戳(前10个):")
       result.words.slice(0, 10).forEach((word: any) => {
